@@ -19,7 +19,7 @@ export const Route = createFileRoute("/categoria/$slug")({
       { title: `${loaderData?.label ?? "Categoria"} femininas | Akause` },
       { name: "description", content: `Compre ${loaderData?.label?.toLowerCase()} femininas na Akause e finalize pelo WhatsApp.` },
       { property: "og:title", content: `${loaderData?.label} | Akause` },
-      { property: "og:description", content: `${loaderData?.label} com vibe orgânica e moderna.` },
+      { property: "og:description", content: `${loaderData?.label} com atitude e personalidade.` },
     ],
   }),
   component: CategoryPage,
@@ -48,7 +48,7 @@ function CategoryPage() {
       <h1 className="font-display text-5xl text-primary">{label}</h1>
       <p className="mt-2 text-muted-foreground">{list.length} modelos disponíveis</p>
       <div className="my-8 flex flex-wrap items-center gap-2">
-        <button onClick={() => setSize("")} className={`rounded-full border px-4 py-1.5 text-sm ${!size ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>
+        <button onClick={() => setSize("")} className={`rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wide ${!size ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>
           Todos
         </button>
         {sizes.map((s) => (
@@ -56,7 +56,7 @@ function CategoryPage() {
             {s}
           </button>
         ))}
-        <select value={sort} onChange={(e) => setSort(e.target.value)} className="ml-auto rounded-full border border-border bg-card px-4 py-1.5 text-sm">
+        <select value={sort} onChange={(e) => setSort(e.target.value)} className="ml-auto rounded-full border border-border bg-card px-4 py-2 text-xs font-bold">
           <option value="new">Mais recentes</option>
           <option value="asc">Menor preço</option>
           <option value="desc">Maior preço</option>
