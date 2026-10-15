@@ -40,7 +40,7 @@ function Index() {
           </div>
           <div className="relative mx-auto flex w-full max-w-[450px] items-center justify-center">
             <div className="relative aspect-square w-full rotate-[-7deg] overflow-hidden rounded-[50%_50%_44%_56%] border-[12px] border-background bg-accent shadow-[18px_20px_0_rgba(0,95,55,0.35)]">
-              {featured?.photos?.[0] ? <img src={featured.photos[0]} alt={featured.name} className="h-full w-full object-cover" fetchPriority="high" /> : <div className="flex h-full items-center justify-center"><span className="editorial-title -rotate-12 text-center text-6xl text-foreground">HOT<br />DROP!</span></div>}
+              {featured?.photos?.[0] ? <img src={featured.photos[0]} alt={featured.name} className="h-full w-full object-contain p-5" fetchPriority="high" /> : <div className="flex h-full items-center justify-center"><span className="editorial-title -rotate-12 text-center text-6xl text-foreground">HOT<br />DROP!</span></div>}
             </div>
             <div className="absolute -bottom-5 right-0 rotate-[-8deg] bg-primary px-5 py-3 text-lg font-black uppercase text-primary-foreground shadow-lg">100% atitude ✳</div>
           </div>
