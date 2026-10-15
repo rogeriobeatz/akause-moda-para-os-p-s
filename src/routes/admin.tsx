@@ -12,7 +12,7 @@ export const Route = createFileRoute("/admin")({
 
 function Admin() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [sent, setSent] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [overview, setOverview] = useState<Overview | null>(null);
   const [loading, setLoading] = useState(false);
@@ -25,12 +25,15 @@ function Admin() {
   }, []);
 
   async function login(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault(); setLoading(true); setError("");
+    e.preventDefault(); setLoading(true); setError(""); setSent(false);
     try {
-      const { error: signInError } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
-      if (signInError) throw new Error("Não foi possível entrar. Confira seu email e sua senha.");
-      setPassword("");
-    } catch (e) { setError(e instanceof Error ? e.message : "Erro ao entrar."); }
+      const { error: signInError } = await supabase.auth.signInWithOtp({
+        email: email.trim().toLowerCase(),
+        options: { emailRedirectTo: window.location.origin + "/admin" },
+      });
+      if (signInError) throw new Error("Não foi possível enviar o link. Verifique se o provedor de e-mail está habilitado no Lovable Cloud.");
+      setSent(true);
+    } catch (e) { setError(e instanceof Error ? e.message : "Erro ao enviar o link."); }
     finally { setLoading(false); }
   }
   async function refresh() {
@@ -51,11 +54,11 @@ function Admin() {
     {!token ? <section className="mx-auto max-w-md border border-border bg-card p-6 shadow-sm md:p-10">
       <LockKeyhole size={28} className="text-primary"/>
       <h2 className="mt-4 text-2xl font-black">Acesso restrito</h2>
-      <p className="mt-2 text-sm text-muted-foreground">Entre com a conta administrativa autorizada no Lovable Cloud.</p>
+      <p className="mt-2 text-sm text-muted-foreground">Informe o e-mail autorizado. Enviaremos um link de acesso, sem precisar de senha.</p>
       <form onSubmit={login} className="mt-7 space-y-4">
         <label className="block text-sm font-semibold">E-mail<input required type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} className="mt-1 w-full rounded-md border bg-background px-4 py-3"/></label>
-        <label className="block text-sm font-semibold">Senha<input required type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} className="mt-1 w-full rounded-md border bg-background px-4 py-3"/></label>
-        <button disabled={loading} type="submit" className="w-full bg-primary px-5 py-3 font-black text-primary-foreground disabled:opacity-50">{loading ? "Entrando..." : "Entrar no painel"}</button>
+        {sent && <p role="status" className="rounded-md bg-secondary p-3 text-sm font-semibold text-primary">Link solicitado! Confira sua caixa de entrada e spam. O link retorna para /admin.</p>}
+        <button disabled={loading} type="submit" className="w-full bg-primary px-5 py-3 font-black text-primary-foreground disabled:opacity-50">{loading ? "Enviando..." : "Enviar link de acesso"}</button>
       </form>
     </section> : <section>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
