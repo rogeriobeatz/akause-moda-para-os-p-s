@@ -34,12 +34,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const s = localStorage.getItem(KEY);
-      if (s) setItems(JSON.parse(s));
+      if (s) {
+        const parsed: unknown = JSON.parse(s);
+        if (Array.isArray(parsed)) {
+          setItems(parsed.filter((item): item is CartItem =>
+            item !== null && typeof item === "object" &&
+            typeof item.reference === "string" && typeof item.name === "string" &&
+            typeof item.size === "string" && typeof item.price === "number" &&
+            Number.isFinite(item.price) && item.price >= 0 &&
+            typeof item.qty === "number" && Number.isInteger(item.qty) && item.qty > 0 &&
+            typeof item.max === "number" && Number.isInteger(item.max) && item.max > 0 &&
+            item.qty <= item.max && typeof item.photo === "string" &&
+            typeof item.color === "string"
+          ));
+        }
+      }
     } catch {}
   }, []);
   const save = (next: CartItem[]) => {
     setItems(next);
-    localStorage.setItem(KEY, JSON.stringify(next));
+    try {
+      localStorage.setItem(KEY, JSON.stringify(next));
+    } catch {
+      // A sacola continua funcionando mesmo com armazenamento indisponível.
+    }
   };
 
   const value: Ctx = {
@@ -47,11 +65,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     open,
     setOpen,
     add: (i) => {
+      if (!Number.isFinite(i.price) || i.price < 0 || !Number.isInteger(i.max) || i.max < 1) return;
       const ex = items.find((x) => x.reference === i.reference && x.size === i.size);
       save(
         ex
           ? items.map((x) => (x === ex ? { ...x, qty: Math.min(x.max, x.qty + i.qty) } : x))
-          : [...items, i],
+          : [...items, { ...i, qty: Math.max(1, Math.min(i.max, i.qty)) }],
       );
       setOpen(true);
     },
