@@ -5,8 +5,12 @@ import type { Database } from "@/integrations/supabase/types";
 import { CATEGORIES, type Product } from "./store";
 
 function publicClient() {
-  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-  return createClient<Database>(process.env["SUPABASE_URL"]!, key, {
+  const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
+  const url = process.env["SUPABASE_URL"];
+  if (!url || !key) {
+    throw new Error("Catálogo indisponível: integração de produtos não configurada.");
+  }
+  return createClient<Database>(url, key, {
     auth: { persistSession: false },
     global: {
       fetch: (input, init) => {
@@ -45,8 +49,8 @@ export const listProducts = createServerFn({ method: "GET" })
     else query = query.order("registered_at", { ascending: false, nullsFirst: false });
     const { data: rows, error } = await query.limit(400);
     if (error) {
-      console.error(error);
-      return [] as Product[];
+      console.error("Falha ao carregar catálogo Akause:", error);
+      throw new Error("Não foi possível carregar os produtos. Tente novamente em instantes.");
     }
     return rows as unknown as Product[];
   });
@@ -55,17 +59,25 @@ export const getProduct = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => z.object({ reference: z.string().min(1).max(60) }).parse(d))
   .handler(async ({ data }) => {
     const sb = publicClient();
-    const { data: row } = await sb.from("products").select(COLS).eq("reference", data.reference).maybeSingle();
+    const { data: row, error } = await sb.from("products").select(COLS).eq("reference", data.reference).maybeSingle();
+    if (error) {
+      console.error("Falha ao buscar produto Akause:", error);
+      throw new Error("Não foi possível carregar este produto. Tente novamente.");
+    }
     if (!row) return null;
     const p = row as unknown as Product;
     let variants: Product[] = [];
     if (p.group_code) {
-      const { data: vs } = await sb
+      const { data: vs, error: variantsError } = await sb
         .from("products")
         .select(COLS)
         .eq("group_code", p.group_code)
         .gt("total_stock", 0)
         .limit(12);
+      if (variantsError) {
+        console.error("Falha ao buscar variações Akause:", variantsError);
+        throw new Error("Não foi possível carregar as opções deste produto.");
+      }
       variants = (vs ?? []) as unknown as Product[];
     }
     return { product: p, variants };
