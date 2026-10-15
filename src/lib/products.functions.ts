@@ -8,7 +8,8 @@ function publicClient() {
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
   const url = process.env["SUPABASE_URL"];
   if (!url || !key) {
-    throw new Error("Catálogo indisponível: integração de produtos não configurada.");
+    console.error("Akause: configure SUPABASE_URL e SUPABASE_PUBLISHABLE_KEY no ambiente do servidor.");
+    return null;
   }
   return createClient<Database>(url, key, {
     auth: { persistSession: false },
@@ -37,7 +38,9 @@ export const listProducts = createServerFn({ method: "GET" })
       .parse(d ?? {}),
   )
   .handler(async ({ data }) => {
-    let query = publicClient().from("products").select(COLS).gt("total_stock", 0);
+    const sb = publicClient();
+    if (!sb) return [] as Product[];
+    let query = sb.from("products").select(COLS).gt("total_stock", 0);
     const cat = CATEGORIES.find((c) => c.slug === data.category);
     if (cat) query = query.or(cat.match.map((m) => `category.ilike.${m}`).join(","));
     if (data.q) {
@@ -59,6 +62,7 @@ export const getProduct = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => z.object({ reference: z.string().min(1).max(60) }).parse(d))
   .handler(async ({ data }) => {
     const sb = publicClient();
+    if (!sb) return null;
     const { data: row, error } = await sb.from("products").select(COLS).eq("reference", data.reference).maybeSingle();
     if (error) {
       console.error("Falha ao buscar produto Akause:", error);
