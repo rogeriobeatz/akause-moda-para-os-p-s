@@ -14,7 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      products: {
+        Row: {
+          active: boolean
+          brand: string
+          category: string
+          color: string
+          cost_price: number
+          description: string
+          group_code: string
+          name: string
+          on_sale: boolean
+          photos: Json
+          reference: string
+          registered_at: string | null
+          stock: Json
+          total_stock: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          brand?: string
+          category?: string
+          color?: string
+          cost_price?: number
+          description?: string
+          group_code?: string
+          name: string
+          on_sale?: boolean
+          photos?: Json
+          reference: string
+          registered_at?: string | null
+          stock?: Json
+          total_stock?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          brand?: string
+          category?: string
+          color?: string
+          cost_price?: number
+          description?: string
+          group_code?: string
+          name?: string
+          on_sale?: boolean
+          photos?: Json
+          reference?: string
+          registered_at?: string | null
+          stock?: Json
+          total_stock?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sync_runs: {
+        Row: {
+          finished_at: string | null
+          id: string
+          message: string | null
+          products_count: number | null
+          started_at: string
+          status: string
+        }
+        Insert: {
+          finished_at?: string | null
+          id?: string
+          message?: string | null
+          products_count?: number | null
+          started_at?: string
+          status?: string
+        }
+        Update: {
+          finished_at?: string | null
+          id?: string
+          message?: string | null
+          products_count?: number | null
+          started_at?: string
+          status?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
