@@ -10,33 +10,69 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CategoriaSlugRouteImport } from './routes/categoria.$slug'
+import { Route as ProdutoRefRouteImport } from './routes/produto.$ref'
+import { Route as ApiPublicJobsSyncStockRouteImport } from './routes/api/public/jobs/sync-stock'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CategoriaSlugRoute = CategoriaSlugRouteImport.update({
+  id: '/categoria/$slug',
+  path: '/categoria/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProdutoRefRoute = ProdutoRefRouteImport.update({
+  id: '/produto/$ref',
+  path: '/produto/$ref',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicJobsSyncStockRoute = ApiPublicJobsSyncStockRouteImport.update({
+  id: '/api/public/jobs/sync-stock',
+  path: '/api/public/jobs/sync-stock',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/categoria/$slug': typeof CategoriaSlugRoute
+  '/produto/$ref': typeof ProdutoRefRoute
+  '/api/public/jobs/sync-stock': typeof ApiPublicJobsSyncStockRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/categoria/$slug': typeof CategoriaSlugRoute
+  '/produto/$ref': typeof ProdutoRefRoute
+  '/api/public/jobs/sync-stock': typeof ApiPublicJobsSyncStockRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/categoria/$slug': typeof CategoriaSlugRoute
+  '/produto/$ref': typeof ProdutoRefRoute
+  '/api/public/jobs/sync-stock': typeof ApiPublicJobsSyncStockRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/categoria/$slug' | '/produto/$ref' | '/api/public/jobs/sync-stock'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/categoria/$slug' | '/produto/$ref' | '/api/public/jobs/sync-stock'
+  id:
+    | '__root__'
+    | '/'
+    | '/categoria/$slug'
+    | '/produto/$ref'
+    | '/api/public/jobs/sync-stock'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CategoriaSlugRoute: typeof CategoriaSlugRoute
+  ProdutoRefRoute: typeof ProdutoRefRoute
+  ApiPublicJobsSyncStockRoute: typeof ApiPublicJobsSyncStockRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +84,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/categoria/$slug': {
+      id: '/categoria/$slug'
+      path: '/categoria/$slug'
+      fullPath: '/categoria/$slug'
+      preLoaderRoute: typeof CategoriaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/produto/$ref': {
+      id: '/produto/$ref'
+      path: '/produto/$ref'
+      fullPath: '/produto/$ref'
+      preLoaderRoute: typeof ProdutoRefRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/jobs/sync-stock': {
+      id: '/api/public/jobs/sync-stock'
+      path: '/api/public/jobs/sync-stock'
+      fullPath: '/api/public/jobs/sync-stock'
+      preLoaderRoute: typeof ApiPublicJobsSyncStockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CategoriaSlugRoute: CategoriaSlugRoute,
+  ProdutoRefRoute: ProdutoRefRoute,
+  ApiPublicJobsSyncStockRoute: ApiPublicJobsSyncStockRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
