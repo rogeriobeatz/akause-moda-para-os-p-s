@@ -44,12 +44,12 @@ function ProductPage() {
   return (
     <main className="mx-auto grid max-w-7xl gap-10 px-5 pt-10 md:grid-cols-2">
       <div>
-        <div className="aspect-square overflow-hidden rounded-[2rem] bg-secondary">
+        <div className="aspect-square overflow-hidden rounded-[2rem] bg-white">
           {p.photos[photo] && <img src={p.photos[photo]} alt={`${p.name} ${p.color}`} className="h-full w-full object-contain p-5" />}
         </div>
         <div className="mt-3 flex gap-2 overflow-x-auto">
           {p.photos.map((ph, i) => (
-            <button key={ph} onClick={() => setPhoto(i)} className={`h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 ${i === photo ? "border-accent" : "border-transparent"}`}>
+            <button key={ph} onClick={() => setPhoto(i)} className={`h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 bg-white ${i === photo ? "border-accent" : "border-transparent"}`}>
               <img src={ph} alt="" loading="lazy" className="h-full w-full object-contain p-2" />
             </button>
           ))}
@@ -67,7 +67,7 @@ function ProductPage() {
             <p className="mb-2 text-sm font-medium">Cores</p>
             <div className="flex gap-2">
               {variants.map((v) => (
-                <Link key={v.reference} to="/produto/$ref" params={{ ref: v.reference }} title={v.color} className={`h-14 w-14 overflow-hidden rounded-full border-2 ${v.reference === p.reference ? "border-accent" : "border-border"}`}>
+                <Link key={v.reference} to="/produto/$ref" params={{ ref: v.reference }} title={v.color} className={`h-14 w-14 overflow-hidden rounded-full border-2 bg-white ${v.reference === p.reference ? "border-accent" : "border-border"}`}>
                   <img src={v.photos[0]} alt={v.color} className="h-full w-full object-contain p-1" />
                 </Link>
               ))}
