@@ -84,6 +84,6 @@ export function whatsappLink(items: CartItem[], total: number, customer: { name:
     `Nome: ${customer.name}`,
     customer.city && `Cidade/CEP: ${customer.city}`,
     customer.note && `Observação: ${customer.note}`,
-  ].filter((l) => l !== false && l !== undefined) as string[];
+  ].filter((l): l is string => typeof l === "string");
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
