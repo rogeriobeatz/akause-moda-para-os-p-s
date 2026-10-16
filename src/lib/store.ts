@@ -39,6 +39,36 @@ export const CATEGORIES = [
   { slug: "especial", label: "Numeração especial", match: ["%numera%"] },
 ] as const;
 
+
+/** Medidas brasileiras referenciais, em cm de comprimento do pé (podem variar por fabricante). */
+export const WOMENS_SHOE_SIZE_GUIDE = [
+  { size: 33, minCm: 21.5, maxCm: 22.0 },
+  { size: 34, minCm: 22.1, maxCm: 22.7 },
+  { size: 35, minCm: 22.8, maxCm: 23.4 },
+  { size: 36, minCm: 23.5, maxCm: 24.1 },
+  { size: 37, minCm: 24.2, maxCm: 24.8 },
+  { size: 38, minCm: 24.9, maxCm: 25.5 },
+  { size: 39, minCm: 25.6, maxCm: 26.2 },
+  { size: 40, minCm: 26.3, maxCm: 27.0 },
+] as const;
+
+export function styleTagsForCategory(category: string): string[] {
+  const value = (category ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+  if (value.includes("scarpin"))
+    return ["Alfaiataria & Trabalho", "Elegância Clássica", "Salto Fino"];
+  if (value.includes("sand") || value.includes("rasteira"))
+    return ["Dias de Sol", "Conforto & Frescor", "Leveza"];
+  if (value.includes("bota"))
+    return ["Outono & Inverno", "Presença Marcante"];
+  if (value.includes("anabela") || value.includes("meia pata") || value.includes("plataforma"))
+    return ["Altura com Conforto", "Estilo Versátil"];
+  return [];
+}
+
 export type CategorySlug = (typeof CATEGORIES)[number]["slug"];
 
 export function cleanDescription(html: string) {
