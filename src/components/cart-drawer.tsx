@@ -26,7 +26,7 @@ export function CartDrawer() {
           {items.length === 0 && <p className="text-muted-foreground">Sua sacola está vazia.</p>}
           {items.map((i) => (
             <div key={i.reference + i.size} className="flex gap-3">
-              <img src={i.photo} alt={i.name} className="h-24 w-20 rounded-xl bg-muted object-contain p-1" />
+              <img src={i.photo} alt={i.name} className="h-24 w-20 rounded-xl bg-white object-contain p-1" />
               <div className="flex-1 text-sm">
                 <p className="font-medium">{i.name}</p>
                 <p className="text-muted-foreground">
