@@ -35,7 +35,7 @@ function Index() {
             <p className="mt-7 max-w-md text-base font-semibold leading-relaxed text-foreground/85 sm:text-lg">Do lookinho casual ao salto de milhões: tem um par com a sua energia por aqui.</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a href="#novidades" className="inline-flex items-center gap-3 rounded-full bg-foreground px-7 py-4 text-xs font-black uppercase tracking-[0.1em] text-background transition hover:bg-primary">Quero meu próximo par <ArrowUpRight size={19} /></a>
-              <Link to="/categoria/$slug" params={{ slug: "saltos" }} className="inline-flex items-center gap-2 rounded-full border-2 border-foreground px-6 py-4 text-xs font-black uppercase tracking-wide hover:bg-background">Explorar saltos <MoveRight size={17} /></Link>
+              <Link to="/categoria/$slug" params={{ slug: "saltos-plataformas" }} className="inline-flex items-center gap-2 rounded-full border-2 border-foreground px-6 py-4 text-xs font-black uppercase tracking-wide hover:bg-background">Explorar saltos <MoveRight size={17} /></Link>
             </div>
           </div>
           <div className="relative mx-auto flex w-full max-w-[450px] items-center justify-center">
@@ -58,7 +58,7 @@ function Index() {
           <div><p className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-primary">Escolha seu mood</p><h2 className="editorial-title text-5xl text-foreground md:text-7xl">QUAL É A<br />SUA VIBE<span className="text-accent">?</span></h2></div>
           <ArrowDownRight className="h-10 w-10 text-primary" aria-hidden="true" />
         </div>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
           {CATEGORIES.map((c, i) => <Link key={c.slug} to="/categoria/$slug" params={{ slug: c.slug }}
             className={`group relative flex aspect-[4/5] flex-col justify-between overflow-hidden p-4 transition-transform hover:-translate-y-1 md:p-6 ${i === 0 ? "bg-accent text-foreground" : i === 1 ? "bg-primary text-primary-foreground" : i === 2 ? "bg-secondary text-secondary-foreground" : "bg-foreground text-background"}`}>
             <span className="relative z-10 text-xs font-black tracking-wider">0{i + 1} / SHOP</span>
