@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Minus, Plus, Trash2, X } from "lucide-react";
+import { MessageCircleHeart, Minus, Plus, Trash2, X } from "lucide-react";
 import { useCart, whatsappLink } from "@/lib/cart";
 import { brl } from "@/lib/store";
 
@@ -67,7 +67,11 @@ export function CartDrawer() {
             >
               Finalizar pedido no WhatsApp
             </a>
-            <p className="text-center text-xs text-muted-foreground">Frete e pagamento combinados no WhatsApp.</p>
+            <div className="flex items-start gap-3 rounded-2xl bg-secondary/60 p-4 text-sm leading-relaxed text-foreground">
+              <MessageCircleHeart aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+              <p>Você será atendida por uma pessoa da nossa equipe no WhatsApp, que vai confirmar tamanho, endereço, frete e pagamento com você.</p>
+            </div>
+            <p className="text-center text-xs text-muted-foreground">O envio do pedido não confirma a compra automaticamente.</p>
           </div>
         )}
       </aside>
