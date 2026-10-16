@@ -11,7 +11,7 @@ export function ProductCard({ p }: { p: Product }) {
             className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.035]" />
         ) : <div className="flex h-full items-center justify-center bg-secondary px-3 text-center font-black uppercase text-primary">AKAUSE.</div>}
         <span className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-background text-foreground transition-transform group-hover:-rotate-45"><ArrowUpRight size={19} aria-hidden="true" /></span>
-        {p.on_sale && <span className="absolute left-3 top-3 bg-accent px-3 py-1 text-[10px] font-black uppercase tracking-wider text-accent-foreground">Em destaque</span>}
+        {p.on_sale && <span className="absolute left-3 top-3 bg-accent px-3 py-1 text-[10px] font-black uppercase tracking-wider text-accent-foreground">Em promoção</span>}
         {p.total_stock <= 5 && <span className="absolute bottom-3 left-3 bg-secondary px-3 py-1 text-[10px] font-black uppercase text-secondary-foreground">Últimos pares</span>}
       </div>
       <div className="mt-3">
