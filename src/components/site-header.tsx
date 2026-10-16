@@ -15,10 +15,10 @@ export function SiteHeader() {
           <span className="font-display text-[2.1rem] font-black uppercase leading-[0.85] tracking-[-0.095em] text-primary sm:text-[2.7rem]">AKAUSE<span className="text-accent">.</span></span>
           <span className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.3em] text-foreground">Moda para os pés</span>
         </Link>
-        <nav aria-label="Categorias" className="hidden items-center gap-7 lg:flex">
+        <nav aria-label="Categorias" className="hidden min-w-0 flex-1 items-center justify-center gap-4 xl:flex">
           {CATEGORIES.map((c) => (
             <Link key={c.slug} to="/categoria/$slug" params={{ slug: c.slug }}
-              className="text-xs font-black uppercase tracking-[0.11em] transition-colors hover:text-primary"
+              className="whitespace-nowrap text-[11px] font-black uppercase tracking-[0.04em] transition-colors hover:text-primary"
               activeProps={{ className: "text-primary underline underline-offset-8" }}>
               {c.label}
             </Link>
@@ -36,7 +36,7 @@ export function SiteHeader() {
           </button>
         </div>
       </div>
-      <nav aria-label="Categorias mobile" className="flex gap-2 overflow-x-auto px-4 pb-3 lg:hidden">
+      <nav aria-label="Categorias mobile" className="flex gap-2 overflow-x-auto px-4 pb-3 xl:hidden">
         {CATEGORIES.map(c => (
           <Link key={c.slug} to="/categoria/$slug" params={{ slug: c.slug }}
             className="shrink-0 rounded-full border border-foreground/20 px-4 py-2 text-[11px] font-extrabold uppercase tracking-wide hover:bg-secondary"

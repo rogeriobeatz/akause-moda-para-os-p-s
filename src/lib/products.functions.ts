@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
 import { CATEGORIES, type Product } from "./store";
+import { isSpecialProduct } from "./catalog-filters";
 
 function publicClient() {
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
@@ -40,22 +41,51 @@ export const listProducts = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     const sb = publicClient();
     if (!sb) return [] as Product[];
-    let query = sb.from("products").select(COLS).gt("total_stock", 0);
-    const cat = CATEGORIES.find((c) => c.slug === data.category);
-    if (cat) query = query.or(cat.match.map((m) => `category.ilike.${m}`).join(","));
-    if (data.q) {
-      const s = data.q.replace(/[%,()]/g, " ");
-      query = query.or(`name.ilike.%${s}%,color.ilike.%${s}%,brand.ilike.%${s}%,category.ilike.%${s}%`);
+
+    const cat = CATEGORIES.find((category) => category.slug === data.category);
+    if (data.category && !cat) return [] as Product[];
+
+    // A numeração especial também inclui produtos cuja grade em estoque chega ao 40.
+    // Esse predicado depende do JSON de estoque, por isso é aplicado após a leitura.
+    const special = data.category === "especial";
+    const pageSize = 500;
+    const products: Product[] = [];
+
+    for (let offset = 0; ; offset += pageSize) {
+      let query = sb.from("products").select(COLS).eq("active", true).gt("total_stock", 0);
+
+      if (cat && cat.match.length && !special) {
+        query = query.or(cat.match.map((match) => "category.ilike." + match).join(","));
+      }
+      if (data.q) {
+        const s = data.q.replace(/[%,()]/g, " ").trim();
+        if (s) {
+          query = query.or(
+            "name.ilike.%" + s + "%,color.ilike.%" + s +
+            "%,brand.ilike.%" + s + "%,category.ilike.%" + s + "%",
+          );
+        }
+      }
+
+      if (data.sort === "price_asc") query = query.order("cost_price", { ascending: true });
+      else if (data.sort === "price_desc") query = query.order("cost_price", { ascending: false });
+      else query = query.order("registered_at", { ascending: false, nullsFirst: false });
+
+      const { data: rows, error } = await query
+        .order("reference", { ascending: true })
+        .range(offset, offset + pageSize - 1);
+
+      if (error) {
+        console.error("Falha ao carregar catálogo Akause:", error);
+        throw new Error("Não foi possível carregar os produtos. Tente novamente em instantes.");
+      }
+
+      const batch = (rows ?? []) as unknown as Product[];
+      products.push(...(special ? batch.filter(isSpecialProduct) : batch));
+      if (batch.length < pageSize) break;
     }
-    if (data.sort === "price_asc") query = query.order("cost_price", { ascending: true });
-    else if (data.sort === "price_desc") query = query.order("cost_price", { ascending: false });
-    else query = query.order("registered_at", { ascending: false, nullsFirst: false });
-    const { data: rows, error } = await query.limit(400);
-    if (error) {
-      console.error("Falha ao carregar catálogo Akause:", error);
-      throw new Error("Não foi possível carregar os produtos. Tente novamente em instantes.");
-    }
-    return rows as unknown as Product[];
+
+    return products;
   });
 
 export const getProduct = createServerFn({ method: "GET" })
