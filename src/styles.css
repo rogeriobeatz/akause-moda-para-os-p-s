@@ -119,6 +119,7 @@
 }
 @layer utilities {
   .font-display { font-weight: 900; letter-spacing: -0.065em; }
+  .font-fraunces { font-family: "Fraunces", Georgia, serif; letter-spacing: -0.035em; }
   .editorial-title { font-family: "Outfit", system-ui, sans-serif; font-weight: 900; letter-spacing: -0.075em; line-height: 0.88; text-transform: uppercase; }
   .akause-ticker { animation: akause-slide 27s linear infinite; }
   @keyframes akause-slide { to { transform: translateX(-50%); } }
