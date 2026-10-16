@@ -5,7 +5,7 @@ import { brl, priceOf, type Product } from "@/lib/store";
 export function ProductCard({ p }: { p: Product }) {
   return (
     <Link to="/produto/$ref" params={{ ref: p.reference }} className="group block min-w-0">
-      <div className="relative aspect-[4/5] overflow-hidden bg-muted">
+      <div className="relative aspect-[4/5] overflow-hidden bg-white">
         {p.photos?.[0] ? (
           <img src={p.photos[0]} alt={`${p.name} ${p.color}`} loading="lazy"
             className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.035]" />
