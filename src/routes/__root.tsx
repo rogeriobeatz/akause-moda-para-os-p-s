@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import { CartProvider } from "@/lib/cart";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { CartDrawer } from "@/components/cart-drawer";
+import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -95,7 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Outfit:wght@300..900&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..800&family=Outfit:wght@300..900&display=swap" },
     ],
   }),
   shellComponent: RootShell,
@@ -129,6 +130,7 @@ function RootComponent() {
         <Outlet />
         <SiteFooter />
         <CartDrawer />
+        <Toaster position="top-center" closeButton />
       </CartProvider>
     </QueryClientProvider>
   );
