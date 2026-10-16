@@ -16,7 +16,7 @@ type Ctx = {
   items: CartItem[];
   open: boolean;
   setOpen: (v: boolean) => void;
-  add: (i: CartItem) => void;
+  add: (i: CartItem, options?: { openCart?: boolean }) => void;
   update: (ref: string, size: string, qty: number) => void;
   remove: (ref: string, size: string) => void;
   clear: () => void;
@@ -64,7 +64,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     items,
     open,
     setOpen,
-    add: (i) => {
+    add: (i, options) => {
       if (!Number.isFinite(i.price) || i.price < 0 || !Number.isInteger(i.max) || i.max < 1) return;
       const ex = items.find((x) => x.reference === i.reference && x.size === i.size);
       save(
@@ -72,7 +72,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           ? items.map((x) => (x === ex ? { ...x, qty: Math.min(x.max, x.qty + i.qty) } : x))
           : [...items, { ...i, qty: Math.max(1, Math.min(i.max, i.qty)) }],
       );
-      setOpen(true);
+      if (options?.openCart !== false) setOpen(true);
     },
     update: (ref, size, qty) =>
       save(items.map((x) => (x.reference === ref && x.size === size ? { ...x, qty: Math.max(1, Math.min(x.max, qty)) } : x))),
