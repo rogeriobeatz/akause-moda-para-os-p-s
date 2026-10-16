@@ -106,7 +106,7 @@ export function SizeGuideModal() {
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerContent className="max-h-[92dvh] rounded-t-3xl">
             <DrawerHeader className="text-left">
-              <DrawerTitle className="font-serif text-2xl font-bold text-primary">Guia de medidas</DrawerTitle>
+              <DrawerTitle className="font-fraunces text-2xl font-bold text-primary">Guia de medidas</DrawerTitle>
               <DrawerDescription>O par ideal começa com o tamanho certo.</DrawerDescription>
             </DrawerHeader>
             <div className="min-h-0 overflow-y-auto px-5 pb-8">
@@ -118,7 +118,7 @@ export function SizeGuideModal() {
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent className="max-h-[90dvh] max-w-xl overflow-y-auto rounded-3xl p-6 sm:p-8">
             <DialogHeader className="text-left">
-              <DialogTitle className="font-serif text-3xl font-bold text-primary">Guia de medidas</DialogTitle>
+              <DialogTitle className="font-fraunces text-3xl font-bold text-primary">Guia de medidas</DialogTitle>
               <DialogDescription>O par ideal começa com o tamanho certo.</DialogDescription>
             </DialogHeader>
             <GuideContent />
