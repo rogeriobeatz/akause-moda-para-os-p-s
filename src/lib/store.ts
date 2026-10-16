@@ -30,10 +30,13 @@ export const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 export const CATEGORIES = [
+  { slug: "todos", label: "Todos os calçados", match: [] },
+  { slug: "scarpins", label: "Scarpins", match: ["%scarpin%"] },
   { slug: "sandalias", label: "Sandálias", match: ["%sand%"] },
-  { slug: "sapatilhas", label: "Sapatilhas", match: ["%sapatilha%"] },
-  { slug: "saltos", label: "Saltos", match: ["%scarpin%", "%anabela%", "%meia pata%", "%peep%", "%salto%"] },
   { slug: "botas", label: "Botas", match: ["%bota%"] },
+  { slug: "saltos-plataformas", label: "Saltos & plataformas", match: ["%anabela%", "%meia pata%", "%salto%", "%peep%"] },
+  { slug: "sapatilhas", label: "Sapatilhas", match: ["%sapatilha%"] },
+  { slug: "especial", label: "Numeração especial", match: ["%numera%"] },
 ] as const;
 
 export type CategorySlug = (typeof CATEGORIES)[number]["slug"];
