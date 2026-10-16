@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo, useState, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { SlidersHorizontal, X, RotateCcw, ArrowDownUp } from "lucide-react";
@@ -26,13 +26,16 @@ const q = (slug: string) =>
 
 export const Route = createFileRoute("/categoria/$slug")({
   loader: ({ context, params }) => {
+    if (params.slug === "saltos") {
+      throw redirect({ to: "/categoria/$slug", params: { slug: "saltos-plataformas" } });
+    }
     const cat = CATEGORIES.find((category) => category.slug === params.slug);
     if (!cat) throw notFound();
     return context.queryClient.ensureQueryData(q(params.slug)).then(() => ({ label: cat.label }));
   },
   head: ({ loaderData }) => ({
     meta: [
-      { title: (loaderData?.label ?? "Categoria") + " femininos | Akause" },
+      { title: (loaderData?.label ?? "Categoria") + " | Akause — Calçados femininos" },
       { name: "description", content: "Compre " + (loaderData?.label?.toLowerCase() ?? "calçados") + " na Akause e finalize pelo WhatsApp." },
       { property: "og:title", content: (loaderData?.label ?? "Categoria") + " | Akause" },
       { property: "og:description", content: (loaderData?.label ?? "Calçados") + " com atitude e personalidade." },
