@@ -18,7 +18,7 @@ export type FeedProduct = {
 function text(block: string, tag: string): string {
   const m = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`, "i").exec(block);
   if (!m) return "";
-  return decode(m[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").trim());
+  return decode((m[1] ?? "").replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").trim());
 }
 
 function decode(s: string) {
