@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, ShoppingBag } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { CATEGORIES, WHATSAPP_NUMBER } from "@/lib/store";
+import { SearchModal } from "@/components/search-modal";
 
 export function SiteHeader() {
   const { count, setOpen } = useCart();
@@ -25,6 +26,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          <SearchModal />
           <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"
             className="hidden items-center gap-1.5 text-xs font-black uppercase tracking-wide hover:text-primary sm:inline-flex">
             Fale com a gente <ArrowUpRight size={16} aria-hidden="true" />

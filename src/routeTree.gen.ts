@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BuscaRouteImport } from './routes/busca'
 import { Route as CategoriaSlugRouteImport } from './routes/categoria.$slug'
 import { Route as ProdutoRefRouteImport } from './routes/produto.$ref'
 import { Route as ApiPublicJobsSyncStockRouteImport } from './routes/api/public/jobs/sync-stock'
@@ -17,6 +18,11 @@ import { Route as ApiPublicJobsSyncStockRouteImport } from './routes/api/public/
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuscaRoute = BuscaRouteImport.update({
+  id: '/busca',
+  path: '/busca',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriaSlugRoute = CategoriaSlugRouteImport.update({
@@ -36,18 +42,21 @@ const ApiPublicJobsSyncStockRoute = ApiPublicJobsSyncStockRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/busca': typeof BuscaRoute
   '/': typeof IndexRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/produto/$ref': typeof ProdutoRefRoute
   '/api/public/jobs/sync-stock': typeof ApiPublicJobsSyncStockRoute
 }
 export interface FileRoutesByTo {
+  '/busca': typeof BuscaRoute
   '/': typeof IndexRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/produto/$ref': typeof ProdutoRefRoute
   '/api/public/jobs/sync-stock': typeof ApiPublicJobsSyncStockRoute
 }
 export interface FileRoutesById {
+  '/busca': typeof BuscaRoute
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
@@ -57,18 +66,20 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/categoria/$slug' | '/produto/$ref' | '/api/public/jobs/sync-stock'
+    '/' | '/busca' | '/categoria/$slug' | '/produto/$ref' | '/api/public/jobs/sync-stock'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/categoria/$slug' | '/produto/$ref' | '/api/public/jobs/sync-stock'
+  to: '/' | '/busca' | '/categoria/$slug' | '/produto/$ref' | '/api/public/jobs/sync-stock'
   id:
     | '__root__'
     | '/'
+    | '/busca'
     | '/categoria/$slug'
     | '/produto/$ref'
     | '/api/public/jobs/sync-stock'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  BuscaRoute: typeof BuscaRoute
   IndexRoute: typeof IndexRoute
   CategoriaSlugRoute: typeof CategoriaSlugRoute
   ProdutoRefRoute: typeof ProdutoRefRoute
@@ -82,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/busca': {
+      id: '/busca'
+      path: '/busca'
+      fullPath: '/busca'
+      preLoaderRoute: typeof BuscaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categoria/$slug': {
@@ -109,6 +127,7 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  BuscaRoute: BuscaRoute,
   IndexRoute: IndexRoute,
   CategoriaSlugRoute: CategoriaSlugRoute,
   ProdutoRefRoute: ProdutoRefRoute,
