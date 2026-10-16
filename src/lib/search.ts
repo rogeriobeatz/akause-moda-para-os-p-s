@@ -31,7 +31,7 @@ function searchableFields(product: Product): string[] {
 
 export function hasValidProductPhoto(product: Product): boolean {
   return Array.isArray(product.photos) &&
-    product.photos.some((photo) => typeof photo === "string" && /^https?:\/\/\S+/i.test(photo.trim()));
+    typeof product.photos[0] === "string" && /^https?:\/\/\S+/i.test(product.photos[0].trim());
 }
 
 export function hasRealStock(product: Product): boolean {
