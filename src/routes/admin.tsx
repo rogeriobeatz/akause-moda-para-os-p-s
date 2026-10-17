@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import {
   AlertCircle,
   ArrowLeft,
@@ -58,6 +58,7 @@ function Admin() {
   const [overview, setOverview] = useState<Overview | null>(null);
   const [overviewBusy, setOverviewBusy] = useState(false);
   const [overviewError, setOverviewError] = useState("");
+  const overviewRequestId = useRef(0);
 
   useEffect(() => {
     let active = true;
@@ -96,21 +97,22 @@ function Admin() {
   }, []);
 
   const loadOverview = useCallback(async (accessToken: string) => {
+    const requestId = ++overviewRequestId.current;
     setOverviewBusy(true);
     setOverviewError("");
     setOverview(null);
 
     try {
       const response = await getAdminOverview({ data: { accessToken } });
-      setOverview(response);
+      if (requestId === overviewRequestId.current) setOverview(response);
     } catch (error) {
-      setOverviewError(
+      if (requestId === overviewRequestId.current) setOverviewError(
         error instanceof Error
           ? error.message
           : "Não foi possível carregar o painel administrativo.",
       );
     } finally {
-      setOverviewBusy(false);
+      if (requestId === overviewRequestId.current) setOverviewBusy(false);
     }
   }, []);
 
@@ -118,8 +120,10 @@ function Admin() {
     if (token) {
       void loadOverview(token);
     } else {
+      overviewRequestId.current += 1;
       setOverview(null);
       setOverviewError("");
+      setOverviewBusy(false);
     }
   }, [token, loadOverview]);
 
